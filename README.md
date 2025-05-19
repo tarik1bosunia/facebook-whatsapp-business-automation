@@ -55,26 +55,11 @@ INSTALLED_APPS = [
 - [dotenv](./guides/dotenv.md)
 - [corsheaders](./guides/corsheaders.md)
 
-# install request: testing purpose , i will remove it in future
+# install request
 ```sh
 pip install requests
 ```
 
-# need
-1. need chatgpt api key where payment done
-
-```sh
-curl https://api.openai.com/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer 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" \
-  -d '{
-    "model": "gpt-4o-mini",
-    "store": true,
-    "messages": [
-      {"role": "user", "content": "write a haiku about ai"}
-    ]
-  }'
-```
 https://youtu.be/IFM3Otvb7So
 https://developers.facebook.com/docs/facebook-login/guides/access-tokens/get-long-lived/
 https://www.youtube.com/watch?v=dbzzLEHXLck&list=PLGK0jxOchcBcriwOMU9iP1RYGF6nzZUOa
