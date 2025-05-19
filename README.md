@@ -3,9 +3,9 @@ User sends message on FB Page
         ↓
 FB Webhook → Django (message received)
         ↓
-Django sends user message → ChatGPT API
+Django sends user message → GEMINI API
         ↓
-ChatGPT generates Bangla response
+GEMINI generates Bangla response
         ↓
 Django sends Bangla reply → Facebook Graph API (Messenger)
         ↓
@@ -29,40 +29,18 @@ Webhook endpoint (public URL via your server or something like ngrok for local t
 OpenAI API key (or other AI model provider)
 
 
-
-```sh
-django-admin startproject facebook_business_automation
-python manage.py startapp facebook
-python manage.py startapp chatgpt
-```
-
-```python
-INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    
-    'facebook',
-    'chatgpt',
-]
-```
-
-
 # initial setup
+- [creating project and apps](./guides/creating_project_and_apps.md)
 - [dotenv](./guides/dotenv.md)
 - [corsheaders](./guides/corsheaders.md)
+- [gemini auto reply of messages from messenger](./guides/geimini.md)
 
 # install request
 ```sh
 pip install requests
 ```
+# [facebook api guide](./guides/facebook_api.md)
 
-https://youtu.be/IFM3Otvb7So
-https://developers.facebook.com/docs/facebook-login/guides/access-tokens/get-long-lived/
-https://www.youtube.com/watch?v=dbzzLEHXLck&list=PLGK0jxOchcBcriwOMU9iP1RYGF6nzZUOa
 
 
 
