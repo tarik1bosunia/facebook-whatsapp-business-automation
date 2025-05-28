@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'c776-103-99-176-48.ngrok-free.app',
+    '38ed-103-99-176-51.ngrok-free.app',
     '127.0.0.1',
 ]
 
@@ -45,11 +45,12 @@ INSTALLED_APPS = [
     
     "corsheaders",
     'rest_framework',
-    
-    'facebook',
 
+    'messaging',
+    'facebook',
     'chatbot',
     'messenger',
+    'whatsapp',
     
     
 ]
@@ -159,8 +160,35 @@ FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
 
 
 # whatsapp settings
-WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/"
-WHATSAPP_PHONE_NUMBER_ID = "YOUR_PHONE_NUMBER_ID"  # From WhatsApp Business Account
-WHATSAPP_ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"  # From WhatsApp Business Account
-WHATSAPP_VERIFY_TOKEN = "YOUR_VERIFY_TOKEN"  # You create this for webhook verification
+WHATSAPP_API_BASE_URL = "https://graph.facebook.com"
+WHATSAPP_API_VERSION = "v22.0"
+WHATSAPP_PHONE_NUMBER_ID = os.environ.get('WHATSAPP_PHONE_NUMBER_ID')  # From WhatsApp Business Account
+WHATSAPP_ACCESS_TOKEN = os.environ.get('WHATSAPP_ACCESS_TOKEN') # From WhatsApp Business Account
+WHATSAPP_VERIFY_TOKEN = os.environ.get('WHATSAPP_VERIFY_TOKEN')  # You create this for webhook verification
+
+
+# logger settings
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 

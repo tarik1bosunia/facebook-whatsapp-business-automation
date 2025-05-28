@@ -1,13 +1,5 @@
 from django.db import models
 
-# class TimeStampedModel(models.Model):
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     class Meta:
-#         abstract = True
-#         ordering = ['-created_at']  # Default ordering for all child models
-
 class SocialMediaUser(models.Model):
     name = models.CharField(max_length=100, blank=True)
     social_media_id = models.CharField(max_length=50, unique=True)
