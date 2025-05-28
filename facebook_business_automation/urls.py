@@ -22,5 +22,6 @@ from facebook.webhooks import webhook
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chatbot.urls')), 
-    path('webhook/', webhook, name='webhook'),
+    # path('webhook/', webhook, name='webhook'),
+    path('api/messenger/', include('messenger.urls')),
 ]

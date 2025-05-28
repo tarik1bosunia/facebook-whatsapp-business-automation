@@ -30,8 +30,7 @@ https://youtu.be/5y7Br0Lc0mc
 
 
 
-# [Install the Gemini API library](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#install-gemini-library
-)
+# [Install the Gemini API library](https://ai.google.dev/gemini-api/docs/quickstart?lang=python#install-gemini-library)
 ```sh
 pip install -q -U google-genai
 ```

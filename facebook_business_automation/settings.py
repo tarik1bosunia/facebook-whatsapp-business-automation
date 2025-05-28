@@ -26,7 +26,11 @@ SECRET_KEY = 'django-insecure-#sbye5p%p=%ac78!m4bgw$v%qa7f)0e_p0^&)sxfq=d-8z5mjp
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    'c776-103-99-176-48.ngrok-free.app',
+    '127.0.0.1',
+]
 
 
 # Application definition
@@ -40,10 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     "corsheaders",
+    'rest_framework',
     
     'facebook',
 
-    'chatbot'
+    'chatbot',
+    'messenger',
     
     
 ]
@@ -133,6 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
     # "https://example.com",
     # "https://sub.example.com",
     # "http://localhost:8080",
@@ -141,9 +148,19 @@ CORS_ALLOWED_ORIGINS = [
 
 
 # Facebook settings
-FACEBOOK_PAGE_ACCESS_TOKEN = os.environ.get('FACEBOOK_PAGE_ACCESS_TOKEN')
+FB_PAGE_ACCESS_TOKEN = os.environ.get('FB_PAGE_ACCESS_TOKEN')
 FACEBOOK_VERIFY_TOKEN = os.environ.get('FACEBOOK_VERIFY_TOKEN')
 
 # GEMINI settings
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+
+# messenger settings
+FB_VERIFY_TOKEN = os.environ.get('FB_VERIFY_TOKEN')
+
+
+# whatsapp settings
+WHATSAPP_API_URL = "https://graph.facebook.com/v22.0/"
+WHATSAPP_PHONE_NUMBER_ID = "YOUR_PHONE_NUMBER_ID"  # From WhatsApp Business Account
+WHATSAPP_ACCESS_TOKEN = "YOUR_ACCESS_TOKEN"  # From WhatsApp Business Account
+WHATSAPP_VERIFY_TOKEN = "YOUR_VERIFY_TOKEN"  # You create this for webhook verification
 
