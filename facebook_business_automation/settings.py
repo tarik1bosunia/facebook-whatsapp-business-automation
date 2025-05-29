@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    '38ed-103-99-176-51.ngrok-free.app',
+    'ad97-103-99-177-138.ngrok-free.app', # temporary for testing webhook
     '127.0.0.1',
 ]
 
@@ -49,10 +49,7 @@ INSTALLED_APPS = [
     'messaging',
     'facebook',
     'chatbot',
-    'messenger',
-    'whatsapp',
-    
-    
+    'customer'
 ]
 
 MIDDLEWARE = [
@@ -190,5 +187,17 @@ LOGGING = {
             'propagate': True,
         },
     },
+}
+
+# ====================== REST FRAMEWORK ======================
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
 }
 

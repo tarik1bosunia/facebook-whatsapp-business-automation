@@ -7,11 +7,10 @@ from django.http import JsonResponse, HttpResponseForbidden, HttpResponse
 from chatbot.utils import ChatBotUtil
 
 from .base_handler import BaseHandler
-from ..exceptions import WebhookVerificationError
 from ..services import user_service, conversation_service
 from ..utils import facebook_api
 
-
+# TODO: need to handle all type of attachments(image, audio, video) also
 class MessengerHandler(BaseHandler):
     def __init__(self):
         super().__init__(settings.FB_VERIFY_TOKEN)
@@ -51,18 +50,20 @@ class MessengerHandler(BaseHandler):
                     sender='customer'
                 )
 
-                # Process and respond (replace with actual processing)
-                # TODO GET GMINI RESPONSE
-                gemini_response = ChatBotUtil.chat_with_gemini(prompt=user_message)
+                # AUTO REPLY
+                if conversation.auto_reply:
 
-                facebook_api.send_message(sender_id, gemini_response.text)
+                    gemini_response = ChatBotUtil.chat_with_gemini(prompt=user_message)
 
-                # Save bot response
-                conversation_service.save_message(
-                    conversation=conversation,
-                    message=gemini_response.text,
-                    sender='ai'
-                )
+                    facebook_api.send_message(sender_id, gemini_response.text)
+
+                    # Save bot response
+                    conversation_service.save_message(
+                        conversation=conversation,
+                        message=gemini_response.text,
+                        sender='ai'
+                    )
+
             except Exception as e:
                 print(f"Error processing message: {str(e)}")
                 facebook_api.send_message(sender_id, "Sorry, I encountered an error")
@@ -72,7 +73,7 @@ class MessengerHandler(BaseHandler):
         payload = event['postback']['payload']
 
         try:
-            user = user_service.get_or_create_user(sender_id)
+            user= user_service.get_or_create_user(sender_id)
             conversation = conversation_service.get_or_create_conversation(user)
 
             # Save postback as message

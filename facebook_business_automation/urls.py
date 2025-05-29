@@ -17,12 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from facebook.webhooks import webhook
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('chatbot.urls')),
     path('api/messaging/', include('messaging.urls')),
-    path('api/messenger/', include('messenger.urls')),
-    path('api/whatsapp/', include('whatsapp.urls')),
 ]

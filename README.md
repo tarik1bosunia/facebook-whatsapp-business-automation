@@ -10,6 +10,8 @@ pip install requests
 ```
 # [facebook api guide](./guides/facebook_api.md)
 
+- pip install django-filter
+
 
 
 

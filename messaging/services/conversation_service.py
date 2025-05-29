@@ -4,10 +4,10 @@ def get_or_create_conversation(user):
     conversation, created = Conversation.objects.get_or_create(
         user=user,
         channel='facebook',
+        defaults={
+            'auto_reply': True  # Default to auto-reply enabled
+        }
     )
-    if not created:
-        conversation.is_read = False
-        conversation.save()
     return conversation
 
 def save_message(conversation, message, sender='business'):
