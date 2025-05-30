@@ -1,8 +1,59 @@
 
-from rest_framework import serializers
-from ..models import Customer, Order
-from messaging.models import SocialMediaUser
+
 from django.utils.timezone import localtime
+
+
+from rest_framework import serializers
+from customer.models import Customer
+from messaging.models import SocialMediaUser
+
+class SocialMediaIDSerializer(serializers.Serializer):
+    messenger = serializers.CharField(required=False, max_length=255)
+    whatsapp = serializers.CharField(required=False, max_length=255)
+    facebook = serializers.CharField(required=False, max_length=255)
+    instagram = serializers.CharField(required=False, max_length=255)
+    twitter = serializers.CharField(required=False, max_length=255)
+
+class CustomerWithSocialMediaSerializer(serializers.ModelSerializer):
+    social_media_ids = SocialMediaIDSerializer(many=True, write_only=True)
+
+    class Meta:
+        model = Customer
+        fields = ['name', 'email', 'phone', 'social_media_ids']
+
+    def create(self, validated_data):
+        social_media_data = validated_data.pop('social_media_ids', [])
+        customer = Customer.objects.create(**validated_data)
+
+        self._process_social_media_data(customer, social_media_data)
+        return customer
+
+    def update(self, instance, validated_data):
+        social_media_data = validated_data.pop('social_media_ids', [])
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        self._process_social_media_data(instance, social_media_data)
+        return instance
+
+    def _process_social_media_data(self, customer, social_media_data):
+        for item in social_media_data:
+            for platform, social_id in item.items():
+                try:
+                    sm_user = SocialMediaUser.objects.get(
+                        platform=platform,
+                        social_media_id=social_id
+                    )
+                    # Update the existing one
+                    sm_user.customer = customer
+                    sm_user.name = customer.name
+                    sm_user.save(update_fields=['customer', 'name'])
+                except SocialMediaUser.DoesNotExist:
+                    raise serializers.ValidationError({
+                        "social_media_ids": f"Invalid social media ID '{social_id}' for platform '{platform}'."
+                    })
 
 
 class SocialMediaUserSerializer(serializers.ModelSerializer):

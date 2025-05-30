@@ -57,10 +57,15 @@ class SocialMediaUser(models.Model):
     class Meta:
         verbose_name = _('Social Media User')
         verbose_name_plural = _('Social Media Users')
-        unique_together = ('platform', 'customer')
         ordering = ['-updated_at']
         indexes = [
             models.Index(fields=['platform', 'social_media_id']),
+        ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['platform', 'social_media_id'],
+                name='unique_social_media_user'
+            )
         ]
 
     def __str__(self):

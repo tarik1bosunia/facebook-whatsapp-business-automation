@@ -1,11 +1,12 @@
 from django.urls import path, include
 
 from rest_framework.routers import DefaultRouter
-from .views import ConversationViewSet, ChatMessageViewSet, send_message, AutoReplyToggleView
+from .views import ConversationViewSet, ChatMessageViewSet, send_message, AutoReplyToggleView, SocialMediaUserViewSet
 
 router = DefaultRouter()
 router.register(r'conversations', ConversationViewSet, basename='conversation')
-router.register(r'messages', ChatMessageViewSet, basename='chat-message')
+router.register(r'messages', ChatMessageViewSet, basename='chatmessage')
+router.register(r'social-media-users', SocialMediaUserViewSet, basename='socialmediauser')
 
 from messaging.views.webhooks import messenger_webhook, whatsapp_webhook
 

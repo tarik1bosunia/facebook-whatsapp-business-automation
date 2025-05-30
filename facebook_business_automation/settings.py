@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'ad97-103-99-177-138.ngrok-free.app', # temporary for testing webhook
+    'cfef-103-99-177-138.ngrok-free.app', # temporary for testing webhook
     '127.0.0.1',
 ]
 

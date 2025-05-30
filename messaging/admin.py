@@ -52,8 +52,8 @@ class SocialMediaUserAdmin(admin.ModelAdmin):
 
 @admin.register(Conversation)
 class ConversationAdmin(admin.ModelAdmin):
-    list_display = ('user', 'channel','auto_reply', 'created_at', 'updated_at')
-    list_filter = ('auto_reply', 'channel', 'created_at', 'updated_at')
+    list_display = ('user','auto_reply', 'created_at', 'updated_at')
+    list_filter = ('auto_reply', 'created_at', 'updated_at')
     search_fields = ('auto_reply', 'user__name', 'user__social_media_id')
     readonly_fields = ('created_at', 'updated_at')
     raw_id_fields = ('user',)

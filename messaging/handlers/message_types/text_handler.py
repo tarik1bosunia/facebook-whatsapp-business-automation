@@ -17,6 +17,7 @@ class TextMessageHandler:
         # Get or create the user
         user, created = SocialMediaUser.objects.get_or_create(
             social_media_id=sender,
+            platform='whatsapp',
             defaults={
                 'name': sender  # You might want to get actual name from message if available
             }
@@ -25,7 +26,6 @@ class TextMessageHandler:
         # Get or create the conversation
         conversation, created = Conversation.objects.get_or_create(
             user=user,
-            channel='whatsapp',
             defaults={
                 'auto_reply': True  # Default to auto-reply enabled
             }

@@ -10,7 +10,7 @@ from .base_handler import BaseHandler
 from ..services import user_service, conversation_service
 from ..utils import facebook_api
 
-# TODO: need to handle all type of attachments(image, audio, video) also
+# TODO: need to handle all type of attachments(image, audio, video, document) also
 class MessengerHandler(BaseHandler):
     def __init__(self):
         super().__init__(settings.FB_VERIFY_TOKEN)
@@ -39,7 +39,7 @@ class MessengerHandler(BaseHandler):
 
         if 'text' in message:
             try:
-                user = user_service.get_or_create_user(sender_id)
+                user = user_service.get_or_create_user(sender_id, platform='facebook')
                 conversation = conversation_service.get_or_create_conversation(user)
 
                 # Save incoming message

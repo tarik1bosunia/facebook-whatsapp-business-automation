@@ -31,7 +31,9 @@ ngrok http http://localhost:8000
 - https://38ed-103-99-176-51.ngrok-free.app/api/messaging/webhook/whatsapp/
 
 # common
--  https://ad97-103-99-177-138.ngrok-free.app
+-  https://cfef-103-99-177-138.ngrok-free.app
+-  https://developers.facebook.com/apps/686555444118209/whatsapp-business/wa-settings/?business_id=1786552525544080
+-  https://developers.facebook.com/apps/1405936334088402/webhooks/?business_id=1786552525544080
 
 # WhatsApp Cloud API Webhook Permissions
 

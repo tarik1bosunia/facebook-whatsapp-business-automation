@@ -1,17 +1,19 @@
 from rest_framework import serializers
 from .models import SocialMediaUser, Conversation, ChatMessage
 
+
+
 class SocialMediaUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialMediaUser
-        fields = ['id', 'social_media_id', 'name', 'profile_pic_url', 'created_at', 'updated_at']
-        read_only_fields = ['id', 'created_at', 'updated_at']
+        fields = '__all__'
 
 class ConversationSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source='pk')
     customer = serializers.SerializerMethodField()
     lastMessage = serializers.SerializerMethodField()
     unreadCount = serializers.SerializerMethodField()
+    channel = serializers.SerializerMethodField()
 
     class Meta:
         model = Conversation
@@ -37,6 +39,9 @@ class ConversationSerializer(serializers.ModelSerializer):
 
     def get_unreadCount(self, obj):
         return obj.unread_count()
+
+    def get_channel(self, obj):
+        return obj.user.platform
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     text = serializers.CharField(source='message')

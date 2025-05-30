@@ -55,13 +55,14 @@ def send_message(request):
             message=message,
             sender='business',
         )
-        if conversation.channel == 'facebook':
+        if conversation.user.platform == 'facebook':
             facebook_api.send_message(social_media_id, message)
-        elif conversation.channel == 'whatsapp':
+        elif conversation.user.platform == 'whatsapp':
             whatsapp_service.WhatsAppService().send_text_message(
                 phone_number=social_media_id,
                 message=message,
             )
+
 
             # whatsapp_api.send_message(social_media_id, message)
 

@@ -1,3 +1,3 @@
-from .customer_serializer import CustomerSerializer
 
-__all__ = ['CustomerSerializer']
+from .customer_serializer import CustomerSerializer, CustomerWithSocialMediaSerializer
+__all__ = ['CustomerSerializer', 'CustomerWithSocialMediaSerializer']
