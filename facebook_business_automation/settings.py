@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'messaging',
     'facebook',
     'chatbot',
-    'customer'
+    'customer',
+    'knowledge_base',
 ]
 
 MIDDLEWARE = [
@@ -199,5 +200,17 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.SessionAuthentication',
+    #     'rest_framework.authentication.TokenAuthentication',
+    # ],
+    #
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ],
+
+    # 'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S',
+
 }
 

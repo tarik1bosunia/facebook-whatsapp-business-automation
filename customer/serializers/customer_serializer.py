@@ -66,14 +66,14 @@ class CustomerSerializer(serializers.ModelSerializer):
     lastOrderDate = serializers.SerializerMethodField()
     channel = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
-    social_media = SocialMediaUserSerializer(many=True, source='social_media_users')
+    # social_media = SocialMediaUserSerializer(many=True, source='social_media_users')
 
     class Meta:
         model = Customer
         fields = [
             'id', 'name', 'email', 'phone', 'createdAt', 'orders_count',
             'total_spent', 'lastOrderDate', 'status', 'channel', 'avatar',
-            'social_media'
+            # 'social_media'
         ]
         extra_kwargs = {
             'createdAt': {'source': 'created_at'},

@@ -1,139 +1,61 @@
 from django.contrib import admin
-from django.utils.html import format_html
-from .models import Customer, Order
 from django.utils.translation import gettext_lazy as _
-from messaging.models import SocialMediaUser
-
-class SocialMediaUserInline(admin.TabularInline):
-    model = SocialMediaUser
-    extra = 0
-    readonly_fields = ['avatar_preview']
-    fields = ['platform', 'social_media_id', 'avatar_url', 'avatar_preview']
-
-    def avatar_preview(self, obj):
-        if obj.avatar_url:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 50%;" />', obj.avatar_url)
-        return "-"
-
-    avatar_preview.short_description = _('Avatar Preview')
-
-
-class OrderInline(admin.TabularInline):
-    model = Order
-    extra = 0
-    readonly_fields = ['order_number', 'total', 'status', 'payment_status', 'created_at']
-    fields = ['order_number', 'total', 'status', 'payment_status', 'created_at']
-    ordering = ['-created_at']
-    show_change_link = True
-
+from .models import Customer, Order
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = [
-        'name',
-        'email',
-        'phone',
-        'orders_count',
-        'total_spent',
-        'status',
-        'channel_display',
-        'avatar_display',
-        'created_at'
-    ]
-    list_filter = ['status', 'created_at']
-    search_fields = ['name', 'email', 'phone', 'social_media_users__social_media_id']
-    readonly_fields = ['orders_count', 'total_spent', 'created_at', 'updated_at', 'avatar_display']
+    list_display = ('name', 'email', 'phone', 'orders_count', 'total_spent', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('name', 'email', 'phone')
+    readonly_fields = ('orders_count', 'total_spent', 'created_at', 'updated_at')
     fieldsets = (
-        (_('Basic Information'), {
+        (None, {
             'fields': ('name', 'email', 'phone', 'status')
         }),
-        (_('Stats'), {
+        (_('Statistics'), {
             'fields': ('orders_count', 'total_spent')
         }),
-        (_('Metadata'), {
-            'fields': ('created_at', 'updated_at')
-        }),
-        (_('Avatar Preview'), {
-            'fields': ('avatar_display',)
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
         }),
     )
-    inlines = [SocialMediaUserInline, OrderInline]
-    actions = ['activate_customers', 'deactivate_customers']
-    date_hierarchy = 'created_at'
-    list_per_page = 20
+    actions = ['mark_as_active', 'mark_as_inactive']
 
-    def channel_display(self, obj):
-        platforms = set(smu.platform for smu in obj.social_media_users.all())
-        if len(platforms) > 1:
-            return 'both'
-        return platforms.pop() if platforms else '-'
+    def mark_as_active(self, request, queryset):
+        queryset.update(status=Customer.Status.ACTIVE)
+    mark_as_active.short_description = _("Mark selected customers as active")
 
-    channel_display.short_description = _('Channel')
-
-    def avatar_display(self, obj):
-        social_avatar = obj.social_media_users.filter(avatar_url__isnull=False).first()
-        avatar_url = social_avatar.avatar_url if social_avatar else f"https://i.pravatar.cc/150?u={obj.id}"
-        return format_html('<img src="{}" width="50" height="50" style="border-radius: 50%;" />', avatar_url)
-
-    avatar_display.short_description = _('Avatar')
-
-    def activate_customers(self, request, queryset):
-        updated = queryset.update(status='active')
-        self.message_user(request, f"{updated} customers were activated.")
-
-    activate_customers.short_description = _("Activate selected customers")
-
-    def deactivate_customers(self, request, queryset):
-        updated = queryset.update(status='inactive')
-        self.message_user(request, f"{updated} customers were deactivated.")
-
-    deactivate_customers.short_description = _("Deactivate selected customers")
-
-
-class OrderStatusFilter(admin.SimpleListFilter):
-    title = _('Order Status')
-    parameter_name = 'order_status'
-
-    def lookups(self, request, model_admin):
-        return Order.Status.choices
-
-    def queryset(self, request, queryset):
-        if self.value():
-            return queryset.filter(status=self.value())
-        return None
-
+    def mark_as_inactive(self, request, queryset):
+        queryset.update(status=Customer.Status.INACTIVE)
+    mark_as_inactive.short_description = _("Mark selected customers as inactive")
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = [
-        'order_number',
-        'customer_link',
-        'total',
-        'status',
-        'payment_status',
-        'created_at',
-        'updated_at'
-    ]
-    list_filter = [OrderStatusFilter, 'payment_status', 'created_at']
-    search_fields = ['order_number', 'customer__name', 'customer__email']
-    readonly_fields = ['created_at', 'updated_at', 'customer_link']
+    list_display = ('order_number', 'customer', 'items', 'total', 'status', 'payment_status', 'source', 'created_at')
+    list_filter = ('status', 'payment_status', 'source', 'created_at')
+    search_fields = ('order_number', 'customer__name', 'customer__email', 'customer__phone')
+    readonly_fields = ('created_at', 'updated_at')
+    raw_id_fields = ('customer',)
     fieldsets = (
-        (_('Order Information'), {
-            'fields': ('order_number', 'customer_link', 'items', 'total')
+        (None, {
+            'fields': ('order_number', 'customer', 'items', 'total')
         }),
         (_('Status'), {
-            'fields': ('status', 'payment_status')
+            'fields': ('status', 'payment_status', 'source')
         }),
-        (_('Metadata'), {
-            'fields': ('created_at', 'updated_at')
+        (_('Timestamps'), {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',)
         }),
     )
-    list_select_related = ['customer']
-    date_hierarchy = 'created_at'
-    list_per_page = 20
+    list_editable = ('status', 'payment_status')
+    actions = ['mark_as_paid', 'mark_as_refunded']
 
-    def customer_link(self, obj):
-        url = f"/admin/customer/customer/{obj.customer.id}/change/"
-        return format_html('<a href="{}">{}</a>', url, obj.customer.name)
+    def mark_as_paid(self, request, queryset):
+        queryset.update(payment_status=Order.PaymentStatus.PAID)
+    mark_as_paid.short_description = _("Mark selected orders as paid")
 
-    customer_link.short_description = _('Customer')
+    def mark_as_refunded(self, request, queryset):
+        queryset.update(payment_status=Order.PaymentStatus.REFUNDED)
+    mark_as_refunded.short_description = _("Mark selected orders as refunded")

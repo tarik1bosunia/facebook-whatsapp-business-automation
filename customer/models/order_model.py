@@ -16,6 +16,12 @@ class Order(models.Model):
         PENDING = 'pending', _('Pending')
         REFUNDED = 'refunded', _('Refunded')
 
+    class Source(models.TextChoices):
+        FACEBOOK = 'facebook', _('Facebook')
+        WHATSAPP = 'whatsapp', _('Whatsapp')
+        MANUAL = 'manual', _('Manual')
+
+
     order_number = models.CharField(
         max_length=20,
         unique=True,
@@ -46,6 +52,13 @@ class Order(models.Model):
         default=Status.PENDING,
         verbose_name=_('Order Status'),
         help_text=_("Current status of the order")
+    )
+    source = models.CharField(
+        max_length=20,
+        choices=Source.choices,
+        default=Source.MANUAL,
+        verbose_name=_('Source'),
+        help_text=_("From which source the order is from")
     )
     payment_status = models.CharField(
         max_length=20,

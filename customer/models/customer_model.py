@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models import Sum
 from django.utils.translation import gettext_lazy as _
 
+# TODO: phone and email need to make it unique so that more than 1 customer can not use same email and phone
 
 class Customer(models.Model):
     class Status(models.TextChoices):

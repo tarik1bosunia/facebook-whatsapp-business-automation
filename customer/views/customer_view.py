@@ -3,11 +3,11 @@ from rest_framework import viewsets, filters, generics
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django_filters.rest_framework import DjangoFilterBackend
-from .models import Customer
-from .serializers import CustomerSerializer
+from customer.models import Customer
+from customer.serializers import CustomerSerializer
 
 
-from .serializers import CustomerWithSocialMediaSerializer
+from customer.serializers import CustomerWithSocialMediaSerializer
 
 class CustomerCreateUpdateView(generics.CreateAPIView, generics.UpdateAPIView):
     queryset = Customer.objects.all()
